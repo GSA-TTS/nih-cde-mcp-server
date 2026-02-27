@@ -184,6 +184,9 @@ def register_tools(mcp: FastMCP) -> None:
                 "docs": data.get("docs", []),
             }
             result_json = json.dumps(result, indent=2)
-            return trim_cde_search_response(json.loads(result_json))
+            trimmed_result = trim_cde_search_response(json.loads(result_json))
+
+            return json.dumps(trimmed_result, indent=2)
+            
         except Exception as e:
             return _handle_api_error(e)
