@@ -1,7 +1,7 @@
 import json
 from fastmcp import FastMCP
 from cde.models import GetDataElementInput, SearchDataElementsInput
-from cde.utils import _make_cde_request, _make_cde_post_request, _handle_api_error
+from cde.utils import _make_cde_request, _make_cde_post_request, _handle_api_error, trim_cde_search_response
 
 
 def register_tools(mcp: FastMCP) -> None:
@@ -183,6 +183,7 @@ def register_tools(mcp: FastMCP) -> None:
                 "has_more": data.get("resultsTotal", 0) > (params.page * params.resultPerPage),
                 "docs": data.get("docs", []),
             }
-            return json.dumps(result, indent=2)
+            result_json = json.dumps(result, indent=2)
+            return trim_cde_search_response(json.loads(result_json))
         except Exception as e:
             return _handle_api_error(e)
